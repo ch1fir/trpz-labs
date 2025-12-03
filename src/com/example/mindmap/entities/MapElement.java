@@ -1,13 +1,11 @@
 package com.example.mindmap.entities;
 
 public abstract class MapElement {
-    private int id;
-    private float x;
-    private float y;
-    private MindMap map;
 
-    public MapElement() {
-    }
+    protected int id;
+    protected float x;
+    protected float y;
+    protected MindMap map;
 
     public MapElement(int id, float x, float y, MindMap map) {
         this.id = id;
@@ -16,14 +14,15 @@ public abstract class MapElement {
         this.map = map;
     }
 
-    public void move(float newX, float newY) {
-        this.x = newX;
-        this.y = newY;
-    }
-
+    // Тип елемента: "TEXT", "IMAGE" і т.д.
     public abstract String getType();
 
-    // гетери/сетери
+    // 🔹 Універсальний текст для відображення на Canvas
+    public abstract String getTextForDisplay();
+    public abstract void setTextForDisplay(String text);
+
+    // --- Гетери / сетери ---
+
     public int getId() {
         return id;
     }

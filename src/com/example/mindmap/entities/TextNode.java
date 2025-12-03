@@ -1,11 +1,13 @@
 package com.example.mindmap.entities;
 
 public class TextNode extends MapElement {
+
     private String textContent;
     private int fontSize;
     private String shapeType;
 
     public TextNode() {
+        super(0, 0, 0, null);
     }
 
     public TextNode(int id, float x, float y, MindMap map,
@@ -14,6 +16,14 @@ public class TextNode extends MapElement {
         this.textContent = textContent;
         this.fontSize = fontSize;
         this.shapeType = shapeType;
+    }
+
+    // 🔹 Додатковий конструктор — зручно для редактора
+    public TextNode(float x, float y, String textContent) {
+        super(0, x, y, null);      // map поки що null, потім можемо проставляти
+        this.textContent = textContent;
+        this.fontSize = 14;
+        this.shapeType = "RECT";
     }
 
     public void editContent(String newText) {
@@ -25,7 +35,19 @@ public class TextNode extends MapElement {
         return "TEXT";
     }
 
-    // гетери/сетери
+    // 🔹 Реалізація "універсального" тексту для Canvas
+    @Override
+    public String getTextForDisplay() {
+        return textContent;
+    }
+
+    @Override
+    public void setTextForDisplay(String text) {
+        this.textContent = text;
+    }
+
+    // --- Старі гетери/сетери можна залишити ---
+
     public String getTextContent() {
         return textContent;
     }

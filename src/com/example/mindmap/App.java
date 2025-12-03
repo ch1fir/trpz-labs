@@ -1,35 +1,40 @@
 package com.example.mindmap;
 
-import com.example.mindmap.entities.*;
-import com.example.mindmap.repositories.*;
+import com.example.mindmap.db.JdbcConnectionProvider;
+import com.example.mindmap.repositories.JdbcMapElementRepository;
+import com.example.mindmap.repositories.JdbcMindMapRepository;
+import com.example.mindmap.repositories.JdbcUserRepository;
+import com.example.mindmap.services.AuthService;
+import com.example.mindmap.services.MindMapService;
+import com.example.mindmap.ui.LoginForm;
+
+import javax.swing.*;
 
 public class App {
     public static void main(String[] args) {
-        UserRepository userRepo = new UserRepository();
-        MindMapRepository mapRepo = new MindMapRepository();
 
-        // Створюємо користувача
-        User user = new User(0, "student", "hash123");
-        userRepo.save(user);
+        // Системний стиль вигляду
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName()
+            );
+        } catch (Exception ignored) {}
 
-        // Створюємо мапу
-        MindMap map = new MindMap(0, "План курсової", user);
-        mapRepo.save(map);
+        // Підключення до БД
+        JdbcConnectionProvider connectionProvider = new JdbcConnectionProvider();
 
-        // Додаємо елементи
-        TextNode title = new TextNode(0, 100, 100, map,
-                "Mind-mapping software", 18, "RECTANGLE");
-        map.addElement(title);
+        // Репозиторії
+        JdbcUserRepository userRepo = new JdbcUserRepository(connectionProvider);
+        JdbcMindMapRepository mapRepo = new JdbcMindMapRepository(connectionProvider);
+        JdbcMapElementRepository elementRepo = new JdbcMapElementRepository(connectionProvider);
 
-        ImageNode img = new ImageNode(0, 200, 150, map,
-                "/images/diagram.png", 320, 240);
-        map.addElement(img);
+        // Сервіси
+        AuthService authService = new AuthService(userRepo);
+        MindMapService mindMapService = new MindMapService(mapRepo, elementRepo);
 
-        // Позначаємо як обрану
-        map.markAsFavorite();
-
-        System.out.println("Користувач: " + user.getUsername());
-        System.out.println("Мапа: " + map.getTitle());
-        System.out.println("Елементів на мапі: " + map.getElements().size());
+        // Стартове вікно (логін/реєстрація)
+        SwingUtilities.invokeLater(() ->
+                new LoginForm(authService, mindMapService).setVisible(true)
+        );
     }
 }

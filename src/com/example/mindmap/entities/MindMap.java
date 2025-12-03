@@ -94,4 +94,9 @@ public class MindMap {
     public List<MapElement> getElements() {
         return elements;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

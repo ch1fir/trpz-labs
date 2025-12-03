@@ -1,11 +1,13 @@
 package com.example.mindmap.entities;
 
 public class ImageNode extends MapElement {
+
     private String imageUrl;
     private int width;
     private int height;
 
     public ImageNode() {
+        super(0, 0, 0, null);
     }
 
     public ImageNode(int id, float x, float y, MindMap map,
@@ -16,9 +18,12 @@ public class ImageNode extends MapElement {
         this.height = height;
     }
 
-    public void resize(int width, int height) {
-        this.width = width;
-        this.height = height;
+    // 🔹 Додатковий конструктор для редактора
+    public ImageNode(float x, float y, String imageUrl) {
+        super(0, x, y, null);
+        this.imageUrl = imageUrl;
+        this.width = 120;
+        this.height = 80;
     }
 
     @Override
@@ -26,7 +31,19 @@ public class ImageNode extends MapElement {
         return "IMAGE";
     }
 
-    // гетери/сетери
+    // 🔥 Реалізуємо абстрактні методи (ImageNode не має тексту)
+    @Override
+    public String getTextForDisplay() {
+        return null; // у зображення нема тексту
+    }
+
+    @Override
+    public void setTextForDisplay(String text) {
+        // нічого не робимо
+    }
+
+    // --- getters / setters ---
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -35,19 +52,19 @@ public class ImageNode extends MapElement {
         this.imageUrl = imageUrl;
     }
 
-    public int getWidth() {
+    public int getWidthPx() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidthPx(int width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public int getHeightPx() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeightPx(int height) {
         this.height = height;
     }
 }
